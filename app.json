@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "PlaceMemory",
-    "slug": "PlaceMemory",
+    "slug": "place-memory",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,21 +10,55 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2D4739"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.placememory.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "PlaceMemory needs your location to show stories near you and let you add stories to places.",
+        "NSLocationAlwaysUsageDescription": "PlaceMemory needs your location to discover stories around you.",
+        "NSCameraUsageDescription": "PlaceMemory needs camera access to scan QR codes and take photos for your stories.",
+        "NSPhotoLibraryUsageDescription": "PlaceMemory needs photo library access to add images to your stories."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#2D4739"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "package": "com.placememory.app",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow PlaceMemory to access your camera to scan QR codes and capture photos."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow PlaceMemory to use your location to discover and share stories."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow PlaceMemory to access your photos to add images to stories.",
+          "cameraPermission": "Allow PlaceMemory to use your camera to take photos for stories."
+        }
+      ]
+    ]
   }
 }
