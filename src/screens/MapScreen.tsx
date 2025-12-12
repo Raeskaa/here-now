@@ -124,6 +124,7 @@ export default function MapScreen() {
   const sheetOpacity = useRef(new Animated.Value(0)).current;
   const searchAnim = useRef(new Animated.Value(0)).current;
   const filterAnim = useRef(new Animated.Value(0)).current;
+  const headerOpacity = useRef(new Animated.Value(1)).current;
 
   // Pan responder for draggable sheet
   const panResponder = useRef(
@@ -175,6 +176,7 @@ export default function MapScreen() {
     Animated.parallel([
       Animated.timing(sheetHeight, { toValue: 0, duration: 250, useNativeDriver: false }),
       Animated.timing(sheetOpacity, { toValue: 0, duration: 200, useNativeDriver: false }),
+      Animated.timing(headerOpacity, { toValue: 1, duration: 200, useNativeDriver: true }),
     ]).start(() => {
       setSelectedLocation(null);
       setSelectedNote(null);
@@ -186,13 +188,19 @@ export default function MapScreen() {
 
   const expandSheet = useCallback(() => {
     setSheetExpanded(true);
-    Animated.spring(sheetHeight, { toValue: SHEET_MAX_HEIGHT, useNativeDriver: false, tension: 65, friction: 11 }).start();
+    Animated.parallel([
+      Animated.spring(sheetHeight, { toValue: SHEET_MAX_HEIGHT, useNativeDriver: false, tension: 65, friction: 11 }),
+      Animated.timing(headerOpacity, { toValue: 0, duration: 200, useNativeDriver: true }),
+    ]).start();
   }, []);
 
   const collapseSheet = useCallback(() => {
     setSheetExpanded(false);
     Keyboard.dismiss();
-    Animated.spring(sheetHeight, { toValue: SHEET_MIN_HEIGHT, useNativeDriver: false, tension: 65, friction: 11 }).start();
+    Animated.parallel([
+      Animated.spring(sheetHeight, { toValue: SHEET_MIN_HEIGHT, useNativeDriver: false, tension: 65, friction: 11 }),
+      Animated.timing(headerOpacity, { toValue: 1, duration: 200, useNativeDriver: true }),
+    ]).start();
   }, []);
 
   // Filter locations
@@ -360,9 +368,9 @@ export default function MapScreen() {
         {longPressCoord && <NewLocationMarker coordinate={longPressCoord} />}
       </MapView>
 
-      {/* Header */}
-      <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
-        <LinearGradient colors={['rgba(250, 247, 242, 0.98)', 'rgba(250, 247, 242, 0.85)']} style={styles.headerGradient}>
+      {/* Header - hides when sheet expanded */}
+      <Animated.View style={[styles.header, { paddingTop: insets.top + 10, opacity: headerOpacity }]} pointerEvents={sheetExpanded ? 'none' : 'auto'}>
+        <View style={styles.headerContent}>
           <View style={styles.headerTop}>
             <View>
               <Text style={styles.headerTitle}>here&now</Text>
@@ -406,8 +414,8 @@ export default function MapScreen() {
               ))}
             </ScrollView>
           </Animated.View>
-        </LinearGradient>
-      </View>
+        </View>
+      </Animated.View>
 
       {/* Controls */}
       <View style={[styles.mapControls, { top: insets.top + (showSearch ? 180 : showFilters ? 200 : 100) }]}>
@@ -604,7 +612,7 @@ const styles = StyleSheet.create({
   
   // Header
   header: { position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 },
-  headerGradient: { paddingHorizontal: SPACING.lg, paddingBottom: SPACING.md, borderBottomLeftRadius: BORDER_RADIUS.xl, borderBottomRightRadius: BORDER_RADIUS.xl, ...SHADOWS.medium },
+  headerContent: { paddingHorizontal: SPACING.lg, paddingBottom: SPACING.md },
   headerTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   headerTitle: { fontSize: 28, fontWeight: '800', color: COLORS.primary, letterSpacing: -0.5 },
   headerSubtitle: { fontSize: 14, color: COLORS.textSecondary, marginTop: 2 },
@@ -661,7 +669,7 @@ const styles = StyleSheet.create({
   newMarkerDot: { width: 24, height: 24, borderRadius: 12, backgroundColor: COLORS.accent, borderWidth: 4, borderColor: COLORS.card, ...SHADOWS.medium },
   
   // Story Sheet
-  storySheet: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: COLORS.background, borderTopLeftRadius: 28, borderTopRightRadius: 28, ...SHADOWS.large, overflow: 'hidden' },
+  storySheet: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: COLORS.background, borderTopLeftRadius: 28, borderTopRightRadius: 28, ...SHADOWS.large, overflow: 'hidden', zIndex: 20 },
   
   // FIXED Sheet Header
   sheetHeader: { backgroundColor: COLORS.background, borderBottomWidth: 1, borderBottomColor: 'rgba(0,0,0,0.06)', paddingBottom: SPACING.sm },
