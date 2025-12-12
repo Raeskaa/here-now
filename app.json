@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "PlaceMemory",
-    "slug": "place-memory",
+    "name": "here&now",
+    "slug": "here-now",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -10,24 +10,24 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#2D4739"
+      "backgroundColor": "#FAF7F2"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.placememory.app",
+      "bundleIdentifier": "com.herenow.app",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "PlaceMemory needs your location to show stories near you and let you add stories to places.",
-        "NSLocationAlwaysUsageDescription": "PlaceMemory needs your location to discover stories around you.",
-        "NSCameraUsageDescription": "PlaceMemory needs camera access to scan QR codes and take photos for your stories.",
-        "NSPhotoLibraryUsageDescription": "PlaceMemory needs photo library access to add images to your stories."
+        "NSLocationWhenInUseUsageDescription": "here&now needs your location to show stories near you and let you add stories to places.",
+        "NSLocationAlwaysUsageDescription": "here&now needs your location to discover stories around you.",
+        "NSCameraUsageDescription": "here&now needs camera access to scan QR codes and take photos for your stories.",
+        "NSPhotoLibraryUsageDescription": "here&now needs photo library access to add images to your stories."
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#2D4739"
+        "backgroundColor": "#FAF7F2"
       },
-      "package": "com.placememory.app",
+      "package": "com.herenow.app",
       "permissions": [
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
@@ -43,20 +43,20 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow PlaceMemory to access your camera to scan QR codes and capture photos."
+          "cameraPermission": "Allow here&now to access your camera to scan QR codes and capture photos."
         }
       ],
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow PlaceMemory to use your location to discover and share stories."
+          "locationAlwaysAndWhenInUsePermission": "Allow here&now to use your location to discover and share stories."
         }
       ],
       [
         "expo-image-picker",
         {
-          "photosPermission": "Allow PlaceMemory to access your photos to add images to stories.",
-          "cameraPermission": "Allow PlaceMemory to use your camera to take photos for stories."
+          "photosPermission": "Allow here&now to access your photos to add images to stories.",
+          "cameraPermission": "Allow here&now to use your camera to take photos for stories."
         }
       ]
     ]

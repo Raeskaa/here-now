@@ -305,7 +305,7 @@ export default function NearbyScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
-        <Text style={styles.headerTitle}>Feed</Text>
+        <Text style={styles.headerTitle}>Stories</Text>
         <TouchableOpacity
           style={styles.scanButton}
           onPress={() => navigation.navigate('Scanner')}
@@ -472,7 +472,7 @@ export default function NearbyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F2F5',
+    backgroundColor: COLORS.background,
   },
   header: {
     flexDirection: 'row',
@@ -480,14 +480,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: SPACING.lg,
     paddingBottom: SPACING.md,
-    backgroundColor: COLORS.card,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.08)',
+    backgroundColor: COLORS.background,
   },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '800',
-    color: COLORS.text,
+    color: COLORS.primary,
     letterSpacing: -0.5,
   },
   scanButton: {

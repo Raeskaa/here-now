@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
 
 import MapScreen from '../screens/MapScreen';
 import NearbyScreen from '../screens/NearbyScreen';
@@ -30,20 +31,46 @@ interface TabIconProps {
 }
 
 function TabIcon({ name, focusedName, label, focused }: TabIconProps) {
+  const scaleAnim = useRef(new Animated.Value(focused ? 1 : 0.9)).current;
+  const opacityAnim = useRef(new Animated.Value(focused ? 1 : 0.6)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.spring(scaleAnim, {
+        toValue: focused ? 1 : 0.9,
+        useNativeDriver: true,
+        tension: 100,
+        friction: 10,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: focused ? 1 : 0.6,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [focused]);
+
   return (
-    <View style={styles.tabIconContainer}>
-      <Ionicons
-        name={focused ? focusedName : name}
-        size={24}
-        color={focused ? COLORS.primary : COLORS.textMuted}
-      />
+    <Animated.View 
+      style={[
+        styles.tabIconContainer,
+        { transform: [{ scale: scaleAnim }], opacity: opacityAnim }
+      ]}
+    >
+      <View style={[styles.iconWrapper, focused && styles.iconWrapperFocused]}>
+        <Ionicons
+          name={focused ? focusedName : name}
+          size={22}
+          color={focused ? COLORS.primary : COLORS.textMuted}
+        />
+      </View>
       <Text
         style={[styles.tabLabel, focused && styles.tabLabelFocused]}
         numberOfLines={1}
       >
         {label}
       </Text>
-    </View>
+    </Animated.View>
   );
 }
 
@@ -54,6 +81,7 @@ function MainTabs() {
         headerShown: false,
         tabBarStyle: styles.tabBar,
         tabBarShowLabel: false,
+        tabBarHideOnKeyboard: true,
       }}
     >
       <Tab.Screen
@@ -78,7 +106,7 @@ function MainTabs() {
             <TabIcon
               name="layers-outline"
               focusedName="layers"
-              label="Feed"
+              label="Stories"
               focused={focused}
             />
           ),
@@ -92,7 +120,7 @@ function MainTabs() {
             <TabIcon
               name="person-outline"
               focusedName="person"
-              label="Profile"
+              label="You"
               focused={focused}
             />
           ),
@@ -109,6 +137,9 @@ export default function AppNavigator() {
         screenOptions={{
           headerShown: false,
           cardStyle: { backgroundColor: COLORS.background },
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
         }}
       >
         <Stack.Screen name="Main" component={MainTabs} />
@@ -117,6 +148,7 @@ export default function AppNavigator() {
           component={AddNoteScreen}
           options={{
             presentation: 'modal',
+            cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
             gestureEnabled: true,
           }}
         />
@@ -139,6 +171,7 @@ export default function AppNavigator() {
           component={ScannerScreen}
           options={{
             presentation: 'fullScreenModal',
+            cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
             gestureEnabled: true,
           }}
         />
@@ -147,6 +180,7 @@ export default function AppNavigator() {
           component={QRDisplayScreen}
           options={{
             presentation: 'modal',
+            cardStyleInterpolator: CardStyleInterpolators.forModalPresentationIOS,
             gestureEnabled: true,
           }}
         />
@@ -157,28 +191,43 @@ export default function AppNavigator() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: COLORS.card,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0, 0, 0, 0.06)',
-    height: Platform.OS === 'ios' ? 88 : 68,
+    backgroundColor: COLORS.background,
+    borderTopWidth: 0,
+    height: Platform.OS === 'ios' ? 85 : 65,
     paddingTop: 8,
-    paddingBottom: Platform.OS === 'ios' ? 28 : 8,
-    ...SHADOWS.small,
+    paddingBottom: Platform.OS === 'ios' ? 25 : 8,
+    elevation: 0,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
   },
   tabIconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 64,
+    minWidth: 60,
+  },
+  iconWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+  iconWrapperFocused: {
+    backgroundColor: 'rgba(45, 71, 57, 0.1)',
   },
   tabLabel: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '500',
     color: COLORS.textMuted,
-    marginTop: 4,
+    marginTop: 2,
     textAlign: 'center',
+    letterSpacing: 0.3,
   },
   tabLabelFocused: {
     color: COLORS.primary,
-    fontWeight: '600',
+    fontWeight: '700',
   },
 });

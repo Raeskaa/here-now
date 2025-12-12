@@ -19,7 +19,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING, BORDER_RADIUS } from '../utils/theme';
-import { RootStackParamList, Reply, Award, AWARD_CONFIG } from '../types';
+import { RootStackParamList, Reply, Award, AWARD_CONFIG, StoryType } from '../types';
 import { useApp } from '../context/AppContext';
 import { voteOnNote, addReply, giveAward, getLocation } from '../utils/storage';
 

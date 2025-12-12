@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GridLocation, PlaceNote, UserProfile, Reply, Award, SortOption } from '../types';
+import { GridLocation, PlaceNote, UserProfile, Reply, Award, SortOption, StoryType } from '../types';
 import { coordinateToGridCode, GeoCoordinate, getDistance } from './GeoGrid';
 
 const STORAGE_KEYS = {
@@ -24,6 +24,9 @@ export async function getUserProfile(): Promise<UserProfile> {
         karma: 0,
         awardsGiven: 0,
         awardsReceived: 0,
+        capsulesCreated: 0,
+        capsulesOpened: 0,
+        seedsPlanted: 0,
         ...user,
       };
     }
@@ -40,6 +43,9 @@ export async function getUserProfile(): Promise<UserProfile> {
     karma: 0,
     awardsGiven: 0,
     awardsReceived: 0,
+    capsulesCreated: 0,
+    capsulesOpened: 0,
+    seedsPlanted: 0,
   };
   
   await saveUserProfile(newUser);
@@ -74,7 +80,7 @@ export async function getLocation(gridCode: string): Promise<GridLocation | null
 }
 
 // Create default note fields
-function createDefaultNoteFields(): Pick<PlaceNote, 'upvotes' | 'downvotes' | 'votedBy' | 'awards' | 'replies' | 'replyCount'> {
+function createDefaultNoteFields(): Pick<PlaceNote, 'upvotes' | 'downvotes' | 'votedBy' | 'awards' | 'replies' | 'replyCount' | 'storyType' | 'whisperRadius' | 'unlockAt'> {
   return {
     upvotes: 0,
     downvotes: 0,
@@ -82,6 +88,9 @@ function createDefaultNoteFields(): Pick<PlaceNote, 'upvotes' | 'downvotes' | 'v
     awards: [],
     replies: [],
     replyCount: 0,
+    storyType: 'story',
+    whisperRadius: null,
+    unlockAt: null,
   };
 }
 

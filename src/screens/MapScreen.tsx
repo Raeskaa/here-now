@@ -640,7 +640,7 @@ export default function MapScreen() {
         >
           <View style={styles.headerTop}>
             <View>
-              <Text style={styles.headerTitle}>PlaceMemory</Text>
+              <Text style={styles.headerTitle}>here&now</Text>
               <Text style={styles.headerSubtitle}>
                 {filteredLocations.length} {filteredLocations.length === 1 ? 'story' : 'stories'} nearby
               </Text>
